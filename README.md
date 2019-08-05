@@ -11,4 +11,5 @@ with it.
 
 Let's see how that goes...
 
-First up [Learn You a Haskell for Great Good!](http://learnyouahaskell.com/chapters)
+- [Learn You a Haskell for Great Good!](http://learnyouahaskell.com/chapters) at
+    [lyahfgg](https://github.com/latrokles/learning-haskell/tree/master/lyahfgg)
