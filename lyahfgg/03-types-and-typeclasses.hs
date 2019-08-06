@@ -3,7 +3,8 @@
 -- type declarations, not always required.
 -- use :t <function name> in ghci to see a function's type signature
 
-removeNonUppercase :: String -> String -- read as functions takes a String and returns a String (?)
+-- read as functions takes a String and returns a String (?)
+removeNonUppercase :: String -> String
 removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z'] ]
 
 factorial :: (Integral a) => a -> a
@@ -52,4 +53,28 @@ factorial n = n * factorial (n -1)
    => is a class constraint
    (==) takes any two values of the same type (a) and returns a Bool, but the value whatever
    the type of it MUST be a member of the Eq class
+
+   some basic typeclasses
+
+   - Eq: equality testing
+   - Ord: ordering, requires membership in Eq.
+   - Show: can be represented as Strings (with show)
+   - Read: parse-able as String into type that can be represented by Show (with read fn)
+   - Enum: sequentially ordered, enumerated, used in ranges
+   - Bounded: upper and lower bound (e.g. Int)
+   - Num: behave like numbers
+   - Integral: includes numbers, but just Int and Integer
+   - Floating: only Float and Double
 -}
+
+-- use show to turn value to String...
+serialize :: (Show a) => a -> String
+serialize x = show x
+
+-- use read String as a value
+parse :: (Read a) => String -> a
+parse x = read x
+
+-- the result of read must be used
+parseAndAdd:: (Read a) => String -> [a]
+parseAndAdd x = parse x : []
