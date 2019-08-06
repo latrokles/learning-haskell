@@ -1,22 +1,7 @@
 
-doubleMe x = x + x
-
-doubleUs x y = doubleMe x + doubleMe y
-
-doubleSmallNumber x = if x > 100
-                         then x
-                         else doubleMe x
-
-removeNonUppercase :: String -> String
-removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z'] ]
-
 lucky :: (Integral a) => a -> String
 lucky 7 = "Lucky number seven!"
 lucky x = "Sorry you are out of luck :("
-
-factorial :: (Integral a) => a -> a
-factorial 0 = 1
-factorial n = n * factorial (n -1)
 
 addVectors :: (Num a) => (a, a) -> (a, a) -> (a, a)
 addVectors (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
