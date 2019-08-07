@@ -66,15 +66,6 @@ quicksort (x:xs) =
         biggerSorted  = quicksort [a | a <- xs, a > x]
     in smallerSorted ++ [x] ++ biggerSorted
 
-applyTwice :: (a -> a) -> a -> a
-applyTwice f x = f (f x)
-
-myzpwt :: (a -> b -> c) -> [a] -> [b] -> [c]
-myzpwt _ [] _ = []
-myzpwt _ _ [] = []
-myzpwt f (x:xs) (y:ys) = f x y : myzpwt f xs ys
-
-
 merge :: Ord a => [a] -> [a] -> [a]
 merge xs [] = xs
 merge [] xs = xs
