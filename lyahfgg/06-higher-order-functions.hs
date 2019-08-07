@@ -119,10 +119,107 @@ map' :: (a -> b) -> [a] -> [b]
 map' f xs = foldr (\x acc -> f x : acc) [] xs
 
 -- foldl1: like foldl, but assumes the starting value is the 1st element of the list
--- foldr1: like foldr, but assumes the starting value is the last element of the list
+-- implementing last with foldl1
+-- begins on the left end of the list (1st element), ignoring the accumulator and
+-- returning the value of the element, terminating on the last element
+last' :: [a] -> a
+last' = foldl1 (\_ x -> x)
 
--- scanl
--- scanr
+-- foldr1: like foldr, but assumes the starting value is the last element of the list
+-- implementing head with foldr1
+-- starts on the right end of the list (last element), ignoring the accumulator and
+-- returning the value of the element, terminating on the first element
+head' :: [a] -> a
+head' = foldr1 (\x _ -> x)
+
+-- scanl and scanr
+{-
+    like foldl and foldr, but return the values of the accumulator states, e.g.:
+    - scanl (+) 0 [3,5,2,1] --> [0,3,8,10,11]
+    - scanr (+) 0 [3,5,2,1] --> [11,8,3,1,0]
+
+    there's also foldl1 and fodlr1
+
+    scans can be used to monitor the progression of a function that can be
+    implemented as a fold.
+
+    e.g. how many elements does it take for the sum of the roots of all natural
+    numbers to exceed 1000
+-}
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
 
 -- function application with $
+{-
+    $ = function appliction (inline)
+
+    ($) :: (a -> b) -> a -> b
+    f $ x = f x
+
+    normal function application (empty space):
+    - has highest precedence
+    - left associative e.g. f a b c --> (((f a) b) c)
+
+    $ function application: 
+    - has lowest precedence
+    - right associative e.g. f $ a $ b $ c --> (f (a (b c)))
+
+    $ helps us make things more readable by not using so many parens
+
+    sum (map sqrt [1..130]) vs. sum $ map sqrt [1..130]
+
+    sqrt 3 + 4 + 9   --> (sqrt 3) + 4 + 9
+    sqrt $ 3 + 4 + 9 --> sqrt (3 + 4 + 9)
+
+    or a more complex one:
+
+    sum (filter (> 10) (map (*2) [2..10])) == sum $ filter (>10) $ map (*2) [2..10]
+
+    you can even treat $ as any other function
+    map ($ 3) [(4+), (10*), (^2)] --> [7, 30, 9]
+
+-}
+
 -- function composition
+{-
+    the . operator (.)
+
+    function composition
+
+    (.) :: (b -> c) -> (a -> b) -> a -> c
+    f . g = \x -> f (g x)
+
+    clearer way to making functions on the fly (w/out lambdas)
+
+    map (\x -> negate (abs x)) [1, 2, -3, -4]
+
+    is the same as:
+
+    map (negate . abs) [1, 2, -3, -4]
+
+    if functions take several parameters would have to be partially applied so
+    that each function takes one paramters. e.g:
+
+    sum (replicate 5 (max 6 9))
+
+    becomes:
+
+    (sum . replicate 5 . max 6) 9
+
+    (.) is also used to defining functions in POINT FREE STYLE...
+
+    point free is a way to write functions in a way that they do not explicitly
+    state the parameters they take. This is made possible because of currying in
+    haskell functions. For exmample:
+-}
+
+-- point free version of sum' xs = foldl (+) 0 xs
+pointFreeSum :: (Num a) => [a] -> a
+pointFreeSum = foldl (+) 0
+
+-- what's the point free version of:
+-- fn x = ceiling (negate (tan (cos (max 50 x))))
+fn = ceiling . negate . tan . cos . max 50
+
+-- thinking in terms of functions instead of the data.
+-- avoid long chains of compositions in order to keep things readable
